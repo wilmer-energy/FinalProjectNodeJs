@@ -19,7 +19,7 @@ const checkValidations = (req, res, next) => {
 };
 
 const createUserValidators = [
-	body('name')
+	body('username')
 		.isString()
 		.withMessage('Name must be a string')
 		.notEmpty()

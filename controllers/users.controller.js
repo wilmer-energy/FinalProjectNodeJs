@@ -26,22 +26,18 @@ const getAllUsers = catchAsync(async (req, res, next) => {
 	});
 });
 
-const createUser = catchAsync(async (req, res, next) => {
-	const { name, email, password, role } = req.body;
-
-	if (role !== 'admin' && role !== 'normal') {
-		return next(new AppError('Invalid role', 400));
-	}
+const createUser = catchAsync(async (req, res) => {
+	const { username, email, password } = req.body;
 
 	// Encrypt the password
 	const salt = await bcrypt.genSalt(12);
 	const hashedPassword = await bcrypt.hash(password, salt);
 
 	const newUser = await User.create({
-		name,
+		username,
 		email,
 		password: hashedPassword,
-		role,
+		role:"user",
 	});
 
 	// Remove password from response
@@ -54,7 +50,7 @@ const createUser = catchAsync(async (req, res, next) => {
 	});
 });
 
-const updateUser = catchAsync(async (req, res, next) => {
+const updateUser = catchAsync(async (req, res) => {
 	const { name } = req.body;
 	const { user } = req;
 
@@ -66,7 +62,7 @@ const updateUser = catchAsync(async (req, res, next) => {
 	});
 });
 
-const deleteUser = catchAsync(async (req, res, next) => {
+const deleteUser = catchAsync(async (req, res) => {
 	const { user } = req;
 
 	await user.update({ status: 'deleted' });

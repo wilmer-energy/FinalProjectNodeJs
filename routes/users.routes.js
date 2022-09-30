@@ -33,6 +33,6 @@ usersRouter.get('/', getAllUsers);
 
 usersRouter.patch('/:id', userExists, protectUsersAccount, updateUser);
 
-usersRouter.delete('/:id', userExists, protectUsersAccount, deleteUser);
+usersRouter.delete('/:id', userExists, protectAdmin, deleteUser);
 
 module.exports = { usersRouter };
