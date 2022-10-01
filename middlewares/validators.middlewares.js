@@ -65,9 +65,23 @@ const createProducts = [
   body("categoryId")
     .notEmpty()
     .withMessage("categoryId cannot be empty"),
-  body("userId")
-    .notEmpty()
-    .withMessage("userId cannot be empty"),
 ];
+
+const createCategory = [
+	body("name")
+	  .isString()
+	  .withMessage("name must be a string")
+	  .notEmpty()
+	  .withMessage("name cannot be empty"),
+  ];
+
+  const createProductInCart = [
+	body("productId")
+	  .notEmpty()
+	  .withMessage("productId cannot be empty"),
+	  body("quantity")
+	  .notEmpty()
+	  .withMessage("quantity cannot be empty"),
+  ];
 
 module.exports = { createUserValidators };
