@@ -103,10 +103,14 @@ const login = catchAsync(async (req, res, next) => {
 	});
 });
 
+const getUserProducts = catchAsync(async (req, res, next) => {});
+
+
 module.exports = {
 	getAllUsers,
 	createUser,
 	updateUser,
 	deleteUser,
 	login,
+	getUserProducts,
 };
