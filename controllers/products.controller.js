@@ -1,6 +1,6 @@
 const { body } = require("express-validator");
-const { Categories } = require("../models/category.models");
-const { Products } = require("../models/product.models");
+const { Categories } = require("../models/categories.model");
+const { Products } = require("../models/products.model");
 const { catchAsync } = require("../utils/catchAsync.util");
 
 const createPoduct = catchAsync(async (req, res) => {

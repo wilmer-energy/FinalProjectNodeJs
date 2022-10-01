@@ -25,7 +25,15 @@ const {
 
 const productRouter = express.Router();
 
+productRouter.post('/', createPoduct)
+productRouter.get('/', productsAll)
+productRouter.get('/:id', productFind)
+productRouter.patch('/:id', productUpdate)
+productRouter.delete('/:id', productDelete)
+productRouter.get('/categories', categoriesProductAll)
+productRouter.post('/categories', createCategory)
+productRouter.patch('/categories/:id', updateCategory)
 
 
-module.exports = { usersRouter };
+module.exports = { productRouter  };
 

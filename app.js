@@ -2,6 +2,8 @@ const express = require('express');
 
 // Routers
 const { usersRouter } = require('./routes/users.routes');
+const { productRouter } = require('./routes/products.routes');
+const { cartsRoutes } = require('./routes/carts.routes');
 
 // Controllers
 const { globalErrorHandler } = require('./controllers/error.controller');
@@ -14,6 +16,8 @@ app.use(express.json());
 
 // Define endpoints
 app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/products', productRouter);
+app.use('/api/v1/cart', cartsRoutes);
 
 // Global error handler
 app.use(globalErrorHandler);
