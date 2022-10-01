@@ -1,24 +1,24 @@
 // Models
 const { Cart } = require("./carts.model");
-const { Categories } = require("./categories.model");
+const { Categories } = require("./category.models");
 const { Order } = require("./orders.model");
 const { ProductImg } = require("./productImgs.model");
-const { Product } = require("./products.model");
+const { Products } = require("./product.models");
 const { ProductInCar } = require("./productsInCar.model");
 const { User } = require("./user.model");
 
 const initModels = () => {
   // 1 User <----> M Products
-  User.hasMany(Product, { foreignKey: "userId" });
-  Product.belongsTo(User);
+  User.hasMany(Products, { foreignKey: "userId" });
+  Products.belongsTo(User);
 
   // 1 Category <----> M Products
-  Categories.hasMany(Product, { foreignKey: "categoryId" });
-  Product.belongsTo(Categories);
+  Categories.hasMany(Products, { foreignKey: "categoryId" });
+  Products.belongsTo(Categories);
 
   // 1 Products <----> M ProductsImg
-  Product.hasMany(ProductImg, { foreignKey: "productId" });
-  ProductImg.belongsTo(Product);
+  Products.hasMany(ProductImg, { foreignKey: "productId" });
+  ProductImg.belongsTo(Products);
 
   // 1 carts <----> M ProductsInCarts
   Cart.hasMany(ProductInCar, { foreignKey: "cartId" });
@@ -29,8 +29,8 @@ const initModels = () => {
   Order.belongsTo(User);
 
   // 1 products <----> 1 ProductsInCarts
-  Product.hasOne(ProductInCar, { foreignKey: "productId" });
-  ProductInCar.belongsTo(Product);
+  Products.hasOne(ProductInCar, { foreignKey: "productId" });
+  ProductInCar.belongsTo(Products);
 
   // 1 user <----> 1 Carts
   User.hasOne(Cart, { foreignKey: "userId" });

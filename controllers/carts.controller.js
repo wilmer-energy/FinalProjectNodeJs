@@ -1,28 +1,91 @@
 // 01. importamos modelo User
 const { Cart } = require("../models/carts.model");
+const { Products } = require("../models/product.models");
+const { ProductInCar } = require("../models/productsInCar.model");
 const { catchAsync } = require("../utils/catchAsync.util");
 
+const addProductCart = catchAsync(async (req, res, next) => {
+  const product = await getProduct(req.body.productId);
 
-const createCart = catchAsync(async (req, res, next) => {
+  if (!product) {
+    return res.status(404).json({
+      status: "Product not Found",
+    });
+  }
 
-});
+  if (product.quantity < req.body.quantity) {
+    return res.status(400).json({
+      status: "Product overflow stock",
+    });
+  }
 
-const updateCart = catchAsync(async (req, res, next) => {
- 
-});
+  const cart = await getCart(req.sessionUser.id);
+  const productInCart = await getProductCart(product, cart);
 
-const deleteProductCart = catchAsync(async (req, res, next) => {
+  if (productInCart.status == "active") {
+    return res.status(400).json({
+      status: "Product in cart",
+    });
+  }
 
-});
-
-const purchaseCart = catchAsync(async (req, res, next) => {
- 
+  productInCart.update({
+    quantity: req.body.quantity,
+    status: "active",
   });
+
+  res.status(200).json({
+    status: "success",
+    productInCart,
+  });
+});
+
+const getCart = async (userId) => {
+  let cart = await Cart.findOne({
+    where: { status: "active", userId },
+  });
+
+  if (!cart) {
+    cart = await Cart.create({
+      userId,
+      status: "active",
+    });
+  }
+
+  return cart;
+};
+
+const getProduct = async (productId) => {
+  return await Products.findOne({
+    where: { status: "active", id: productId },
+  });
+};
+
+const getProductCart = async (product, cart) => {
+  let productInCart = await ProductInCar.findOne({
+    where: { carId: cart.id, productId: product.id },
+  });
+
+  if (!productInCart) {
+    productInCart = await ProductInCar.create({
+      carId: cart.id,
+      productId: product.id,
+      quantity: "0",
+      status: "create",
+    });
+  }
+  return productInCart;
+};
+
+const updateCart = catchAsync(async (req, res, next) => {});
+
+const deleteProductCart = catchAsync(async (req, res, next) => {});
+
+const purchaseCart = catchAsync(async (req, res, next) => {});
 
 // 03. exportamos las funciones creadas
 module.exports = {
- createCart,
- updateCart,
- deleteProductCart,
- purchaseCart
+  addProductCart,
+  updateCart,
+  deleteProductCart,
+  purchaseCart,
 };

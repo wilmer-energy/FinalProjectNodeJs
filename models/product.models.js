@@ -15,23 +15,23 @@ const Products = db.define("Products", {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  qauntity: {
+  quantity: {
     type: DataTypes.INTEGER,
     allowNull: false,
     defaultValue:0
   },
 
   price: {
-    type: DataTypes.STRING,
-    allowNull: true,
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   categoryId: {
-    type: DataTypes.STRING,
-    allowNull: true,
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
   userId: {
-    type: DataTypes.STRING,
-    allowNull: true,
+    type: DataTypes.INTEGER,
+    allowNull: false,
   },
  
   status: {

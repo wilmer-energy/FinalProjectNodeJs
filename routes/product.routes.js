@@ -17,16 +17,10 @@ productRouter.post("/", createPoduct);
 productRouter.get("/", productsAll);
 productRouter.get("/:id", productFind);
 productRouter.patch("/:id", productUpdate);
-productRouter.delete('/:id', productDelete);
+productRouter.delete("/:id", productDelete);
 
 productRouter.get("/categories", categoriesProductAll);
 productRouter.post("/categories", createCategory);
 productRouter.patch("/categories/:id", updateCategory);
-
-//usersRouter.post('/login', login);
-
-//usersRouter.patch('/:id', userExists, protectUsersAccount, updateUser);
-
-
 
 module.exports = { productRouter };
