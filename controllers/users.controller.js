@@ -104,8 +104,6 @@ const login = catchAsync(async (req, res, next) => {
 });
 
 const getUserProducts = catchAsync(async (req, res, next) => {});
-const getUserOrders = catchAsync(async (req, res, next) => {});
-const getUserOrderById = catchAsync(async (req, res, next) => {});
 
 module.exports = {
 	getAllUsers,
@@ -114,6 +112,4 @@ module.exports = {
 	deleteUser,
 	login,
 	getUserProducts,
-	getUserOrders,
-	getUserOrderById,
 };
