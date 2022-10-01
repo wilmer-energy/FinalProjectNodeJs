@@ -1,18 +1,22 @@
 const { body } = require("express-validator");
 const { Categories } = require("../models/categories.model");
-const { Products } = require("../models/products.model");
+const { Product } = require("../models/products.model");
 const { catchAsync } = require("../utils/catchAsync.util");
 
 const createPoduct = catchAsync(async (req, res) => {
   const { title, description, price, categoryId, quantity } = req.body;
+  const { sessionUser } = req;
 
-  const newProduct = await Products.create({
+console.log(req.sessionUser.id);
+console.log(title);
+
+  const newProduct = await Product.create({
     title,
     description,
     price,
     categoryId,
     quantity,
-    userId: req.sessionUser.id,
+    userId: sessionUser.id,
   });
   // 201 -> Success and a resource has been created
   res.status(201).json({

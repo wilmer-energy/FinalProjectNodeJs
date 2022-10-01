@@ -25,7 +25,8 @@ const {
 
 const productRouter = express.Router();
 
-productRouter.post('/', createPoduct)
+
+productRouter.post('/',protectSession, createPoduct)
 productRouter.get('/', productsAll)
 productRouter.get('/:id', productFind)
 productRouter.patch('/:id', productUpdate)
