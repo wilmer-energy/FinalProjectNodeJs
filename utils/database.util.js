@@ -1,7 +1,9 @@
 const { Sequelize, DataTypes } = require('sequelize');
+
 const dotenv = require('dotenv');
 
 dotenv.config({ path: './config.env' });
+
 
 // Establish db connection
 const db = new Sequelize({

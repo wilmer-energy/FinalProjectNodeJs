@@ -1,6 +1,7 @@
 const { db, DataTypes } = require('../utils/database.util');
 
 const User = db.define('user', {
+
 	id: {
 		type: DataTypes.INTEGER,
 		primaryKey: true,
