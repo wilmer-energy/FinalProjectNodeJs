@@ -7,6 +7,9 @@ const {
 	updateUser,
 	deleteUser,
 	login,
+	getUserProducts,
+	getOrdersUser,
+	getOrdersUserById
 } = require('../controllers/users.controller');
 
 // Middlewares
@@ -31,8 +34,14 @@ usersRouter.use(protectSession);
 
 usersRouter.get('/',protectAdmin, getAllUsers);
 
+usersRouter.get('/me', getUserProducts);
+
 usersRouter.patch('/:id', userExists, protectUsersAccount, updateUser);
 
 usersRouter.delete('/:id', userExists, protectUsersAccount, deleteUser);
+
+usersRouter.get('/orders', getOrdersUser);
+
+usersRouter.get('/orders/:id', getOrdersUserById);
 
 module.exports = { usersRouter };

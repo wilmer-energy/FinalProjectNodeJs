@@ -9,7 +9,8 @@ const {
     categoriesProductAll,
     updateCategory,
     productUpdate,
-    productDelete,
+    productDelete
+  
 } = require('../controllers/products.controller');
 
 // Middlewares
@@ -25,15 +26,21 @@ const {
 
 const productRouter = express.Router();
 
+// este endpoint debe estar en orden 
+productRouter.get('/categories', categoriesProductAll)
+
 
 productRouter.post('/',protectSession, createPoduct)
 productRouter.get('/', productsAll)
 productRouter.get('/:id', productFind)
-productRouter.patch('/:id', productUpdate)
-productRouter.delete('/:id', productDelete)
-productRouter.get('/categories', categoriesProductAll)
-productRouter.post('/categories', createCategory)
-productRouter.patch('/categories/:id', updateCategory)
+productRouter.patch('/:id',protectSession, productUpdate)
+productRouter.delete('/:id', protectSession, productDelete)
+
+
+
+productRouter.post('/categories', protectSession, protectUsersAccount, createCategory)
+productRouter.patch('/categories/:id',protectSession, updateCategory)
+
 
 
 module.exports = { productRouter  };

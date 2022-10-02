@@ -27,7 +27,7 @@ console.log(title);
 
 const productsAll = async (req, res) => {
   try {
-    const product = await Products.findAll({
+    const product = await Product.findAll({
       where: { status: "active" },
     });
 
@@ -45,7 +45,7 @@ const productsAll = async (req, res) => {
 const productFind = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Products.findOne({ where: { id } });
+    const product = await Product.findOne({ where: { id } });
     if (!product) {
       return res.status(404).json({
         status: "not Found",
@@ -65,7 +65,7 @@ const productFind = async (req, res) => {
 const productUpdate = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Products.findOne({ where: { id } });
+    const product = await Product.findOne({ where: { id } });
 
     if (!product) {
       return res.status(404).json({
@@ -97,7 +97,7 @@ const productUpdate = async (req, res) => {
 const productDelete = async (req, res) => {
   try {
     const { id } = req.params;
-    const product = await Products.findOne({ where: { id } });
+    const product = await Product.findOne({ where: { id } });
 
     if (product.userId != req.sessionUser.id) {
       return res.status(401).json({
@@ -127,8 +127,8 @@ const createCategory = catchAsync(async (req, res) => {
   });
 });
 
-const categoriesProductAll = async (req, res) => {
-  try {
+const categoriesProductAll =  catchAsync(async(req, res) => {
+  
     const categoriesProduct = await Categories.findAll();
 
     res.status(200).json({
@@ -137,10 +137,9 @@ const categoriesProductAll = async (req, res) => {
         categoriesProduct,
       },
     });
-  } catch (error) {
-    console.log(error);
-  }
-};
+    
+
+});
 
 const updateCategory = async (req, res) => {
   try {
@@ -161,6 +160,8 @@ const updateCategory = async (req, res) => {
   }
 };
 
+
+
 module.exports = {
   createPoduct,
   productsAll,
@@ -169,5 +170,6 @@ module.exports = {
   categoriesProductAll,
   updateCategory,
   productUpdate,
-  productDelete,
+  productDelete
+ 
 };
