@@ -19,6 +19,7 @@ const {
   protectUsersAccount,
   protectAdmin,
 } = require("../middlewares/auth.middlewares");
+
 const {
   createUserValidators,
 } = require("../middlewares/validators.middlewares");

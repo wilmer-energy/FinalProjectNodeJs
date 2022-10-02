@@ -37,15 +37,8 @@ const createUserValidators = [
   checkValidations,
 ];
 
-const createsom = [
-  body("name")
-    .isString()
-    .withMessage("Name must be a string")
-    .notEmpty()
-    .withMessage("Name cannot be empty"),
-];
 
-const createProducts = [
+const createProductsValidator = [
   body("title")
     .isString()
     .withMessage("title must be a string")
@@ -67,7 +60,7 @@ const createProducts = [
     .withMessage("categoryId cannot be empty"),
 ];
 
-const createCategory = [
+const createCategoryValidator = [
 	body("name")
 	  .isString()
 	  .withMessage("name must be a string")
@@ -75,7 +68,7 @@ const createCategory = [
 	  .withMessage("name cannot be empty"),
   ];
 
-  const createProductInCart = [
+  const createProductInCartValidator = [
 	body("productId")
 	  .notEmpty()
 	  .withMessage("productId cannot be empty"),
@@ -84,4 +77,4 @@ const createCategory = [
 	  .withMessage("quantity cannot be empty"),
   ];
 
-module.exports = { createUserValidators };
+module.exports = { createUserValidators,createProductsValidator,createCategoryValidator,createProductInCartValidator };

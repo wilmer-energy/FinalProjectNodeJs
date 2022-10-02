@@ -24,7 +24,7 @@ const {
 
 const {categoriesExists} =  require('../middlewares/categories.middlewares')
 const {
-	createUserValidators,
+	createCategoryValidator,
 } = require('../middlewares/validators.middlewares');
 
 
@@ -35,15 +35,18 @@ const productRouter = express.Router();
 productRouter.get('/categories', categoriesProductAll)
 productRouter.get('/', productsAll)
 productRouter.get('/:id', productFind)
-productRouter.patch('/:id',protectSession, productUpdate)
-productRouter.delete('/:id', protectSession, productDelete)
+
+productRouter.use(protectSession)
+productRouter.post('/',upload.array('productImgs',5),createPoduct)
+productRouter.patch('/:id', productUpdate)
+productRouter.delete('/:id', productDelete)
 
 
 
-productRouter.post('/categories', protectSession, protectUsersAccount, createCategory)
-productRouter.patch('/categories/:id',categoriesExists, protectSession, updateCategory)
+productRouter.post('/categories', protectUsersAccount,createCategoryValidator, createCategory)
+productRouter.patch('/categories/:id',categoriesExists, updateCategory)
 
-productRouter.use(upload.array('productImgs',5))
+
 
 
 
