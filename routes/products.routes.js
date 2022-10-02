@@ -1,4 +1,5 @@
 const express = require('express');
+const {upload} =require('../utils/multer.util')
 
 // Controllers
 const {
@@ -30,11 +31,8 @@ const {
 
 const productRouter = express.Router();
 
-// este endpoint debe estar en orden 
+
 productRouter.get('/categories', categoriesProductAll)
-
-
-productRouter.post('/',protectSession, createPoduct)
 productRouter.get('/', productsAll)
 productRouter.get('/:id', productFind)
 productRouter.patch('/:id',protectSession, productUpdate)
@@ -44,6 +42,8 @@ productRouter.delete('/:id', protectSession, productDelete)
 
 productRouter.post('/categories', protectSession, protectUsersAccount, createCategory)
 productRouter.patch('/categories/:id',categoriesExists, protectSession, updateCategory)
+
+productRouter.use(upload.array('productImgs',5))
 
 
 
