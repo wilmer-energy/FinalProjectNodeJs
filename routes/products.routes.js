@@ -1,4 +1,5 @@
 const express = require('express');
+const {upload} =require('../utils/multer.util')
 
 // Controllers
 const {
@@ -24,6 +25,8 @@ const {
 } = require('../middlewares/validators.middlewares');
 
 const productRouter = express.Router();
+
+productRouter.use(upload.array('productImgs',4))
 
 
 

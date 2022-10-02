@@ -2,9 +2,10 @@ const { body } = require("express-validator");
 const { Categories } = require("../models/category.models");
 const { Products } = require("../models/product.models");
 const { catchAsync } = require("../utils/catchAsync.util");
+const {uploadProductImgs}=require('../utils/firebase.util')
 
 const createPoduct = catchAsync(async (req, res) => {
-  const { title, description, price, categoryId, quantity } = req.body;
+  const { title, description, price, categoryId, quantity, productImgs } = req.body;
 
   const newProduct = await Products.create({
     title,
@@ -14,10 +15,12 @@ const createPoduct = catchAsync(async (req, res) => {
     quantity,
     userId: req.sessionUser.id,
   });
+  let imgs=[]
+  if(!productImgs) imgs=await uploadProductImgs(productImgs,newProduct.id)
   // 201 -> Success and a resource has been created
   res.status(201).json({
     status: "success",
-    data: { newProduct },
+    data: { newProduct,imgs },
   });
 });
 
