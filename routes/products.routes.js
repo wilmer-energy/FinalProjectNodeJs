@@ -20,9 +20,13 @@ const {
 	protectUsersAccount,
 	protectAdmin,
 } = require('../middlewares/auth.middlewares');
+
+const {categoriesExists} =  require('../middlewares/categories.middlewares')
 const {
 	createUserValidators,
 } = require('../middlewares/validators.middlewares');
+
+
 
 const productRouter = express.Router();
 
@@ -39,7 +43,7 @@ productRouter.delete('/:id', protectSession, productDelete)
 
 
 productRouter.post('/categories', protectSession, protectUsersAccount, createCategory)
-productRouter.patch('/categories/:id',protectSession, updateCategory)
+productRouter.patch('/categories/:id',categoriesExists, protectSession, updateCategory)
 
 
 

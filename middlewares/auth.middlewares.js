@@ -47,6 +47,7 @@ const protectSession = catchAsync(async (req, res, next) => {
 	next();
 });
 
+
 // Check the sessionUser to compare to the one that wants to be updated/deleted
 const protectUsersAccount = (req, res, next) => {
 	const { sessionUser, user } = req;

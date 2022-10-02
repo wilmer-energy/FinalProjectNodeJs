@@ -1,12 +1,14 @@
 // 01. importamos el modelo
 const { Categories } = require("../models/categories.model");
+const { Product } = require("../models/products.model");
 
 // 02. funcion que busque el ID y verifica si hay o no hay
 const categoriesExists = async (req, res, next) => {
 try {    
     const { id } = req.params;
-    const categoriesId = await Categories.findOne({ where: { id } });
-    
+    const categoriesId = await Categories.findOne({ where: { id }});
+   
+
     if (!categoriesId) {
         return res.status(404).json({
             status: 'error',
@@ -14,7 +16,8 @@ try {
         });
     }
 // 03. el resultado de la busqueda  userId la pasamos por req
-    req.categoriesId = categoriesId;
+    // req.categoriesId = categoriesId;
+    // console.log(categoriesId);
     next();
 
 } catch (error) {
