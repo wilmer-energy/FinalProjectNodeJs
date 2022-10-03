@@ -121,13 +121,43 @@ const updateCart = catchAsync(async (req, res, next) => {
     });
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     status: "success",
     productInCart,
   });
 });
 
-const deleteProductCart = catchAsync(async (req, res, next) => {});
+const deleteProductCart = catchAsync(async (req, res, next) => {
+  const cart = await Cart.findOne({
+    where: { status: "active", userId: req.sessionUser.id },
+  });
+
+  if (!cart) {
+    return res.status(404).json({
+      status: "Cart not Found",
+    });
+  }
+
+  const { productId } = req.params;
+  const productInCart = await ProductInCar.findOne({
+    where: { carId: cart.id, productId, status: "active" },
+  });
+
+  if (!productInCart) {
+    return res.status(404).json({
+      status: "Product in cart not Found",
+    });
+  }
+
+  productInCart.update({
+    status: "removed",
+    quantity:0
+  });
+
+  return res.status(200).json({
+    status: "success",
+  });
+});
 
 const purchaseCart = catchAsync(async (req, res, next) => {});
 
