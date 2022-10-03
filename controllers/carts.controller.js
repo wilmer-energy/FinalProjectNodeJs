@@ -76,7 +76,56 @@ const getProductCart = async (product, cart) => {
   return productInCart;
 };
 
-const updateCart = catchAsync(async (req, res, next) => {});
+const updateCart = catchAsync(async (req, res, next) => {
+  const product = await getProduct(req.body.productId);
+
+  if (!product) {
+    return res.status(404).json({
+      status: "Product not Found",
+    });
+  }
+
+  if (product.quantity < req.body.newQty) {
+    return res.status(400).json({
+      status: "Product overflow stock",
+    });
+  }
+
+  const cart = await Cart.findOne({
+    where: { status: "active", userId: req.sessionUser.id },
+  });
+
+  if (!cart) {
+    return res.status(404).json({
+      status: "Cart not Found",
+    });
+  }
+
+  const productInCart = await ProductInCar.findOne({
+    where: { carId: cart.id, productId: product.id, status: "active" },
+  });
+
+  if (!productInCart) {
+    return res.status(404).json({
+      status: "Product in cart not Found",
+    });
+  }
+
+  if (req.body.newQty == 0) {
+    productInCart.update({
+      status: "removed",
+    });
+  } else {
+    productInCart.update({
+      quantity: req.body.newQty,
+    });
+  }
+
+  res.status(200).json({
+    status: "success",
+    productInCart,
+  });
+});
 
 const deleteProductCart = catchAsync(async (req, res, next) => {});
 
