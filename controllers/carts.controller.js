@@ -2,6 +2,7 @@
 const { Cart } = require("../models/carts.model");
 const { Products } = require("../models/product.models");
 const { ProductInCar } = require("../models/productsInCar.model");
+const { Order } = require("../models/orders.model");
 const { catchAsync } = require("../utils/catchAsync.util");
 
 const addProductCart = catchAsync(async (req, res, next) => {
@@ -151,7 +152,7 @@ const deleteProductCart = catchAsync(async (req, res, next) => {
 
   productInCart.update({
     status: "removed",
-    quantity:0
+    quantity: 0,
   });
 
   return res.status(200).json({
@@ -159,7 +160,59 @@ const deleteProductCart = catchAsync(async (req, res, next) => {
   });
 });
 
-const purchaseCart = catchAsync(async (req, res, next) => {});
+const purchaseCart = catchAsync(async (req, res, next) => {
+  const cart = await Cart.findOne({
+    where: { status: "active", userId: req.sessionUser.id },
+  });
+
+  if (!cart) {
+    return res.status(404).json({
+      status: "Cart not Found",
+    });
+  }
+
+  const productsInCart = await ProductInCar.findAll({
+    where: { carId: cart.id, status: "active" },
+  });
+
+  if (!productsInCart.length) {
+    return res.status(404).json({
+      status: "Cart Empty",
+    });
+  }
+
+  let totalPrice = 0;
+
+  productsInCart.forEach(async (productInCart) => {
+    const product = await getProduct(productInCart.productId);
+
+    product.update({
+      quantity: product.quantity - productInCart.quantity,
+    });
+
+    totalPrice += productInCart.quantity * product.price;
+
+    productInCart.update({
+      status: "purchased",
+    });
+  });
+
+  cart.update({
+    status: "purchased",
+  });
+
+  const newOrder = await Order.create({
+    userId: req.sessionUser.id,
+    cartId: cart.id,
+    totalPrice,
+    status: "created",
+  });
+
+  return res.status(200).json({
+    status: "success",
+    newOrder,
+  });
+});
 
 // 03. exportamos las funciones creadas
 module.exports = {
