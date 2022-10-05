@@ -8,7 +8,7 @@ const { Product } = require("../models/products.model");
 // Utils
 const { catchAsync } = require("../utils/catchAsync.util");
 const { AppError } = require("../utils/appError.util");
-
+const { Email } = require("../utils/email.util");
 dotenv.config({ path: "./config.env" });
 
 // Gen random jwt signs
@@ -47,6 +47,9 @@ const createUser = catchAsync(async (req, res, next) => {
   // Remove password from response
   newUser.password = undefined;
 
+
+  // ?Send welcome email
+	await new Email(email).sendWelcome(username);
   // 201 -> Success and a resource has been created
   res.status(201).json({
     status: "success",

@@ -1,5 +1,5 @@
 const express = require('express');
-
+const path = require('path');
 // Routers
 const { usersRouter } = require('./routes/users.routes');
 const { productRouter } = require('./routes/products.routes');
@@ -21,6 +21,14 @@ app.use('/api/v1/cart', cartsRoutes);
 
 // Global error handler
 app.use(globalErrorHandler);
+
+
+// Set template engine
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
+
+// Serving static files
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Catch non-existing endpoints
 app.all('*', (req, res) => {

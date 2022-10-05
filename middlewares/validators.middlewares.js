@@ -60,6 +60,7 @@ const createProductsValidator = [
     .withMessage("categoryId cannot be empty"),
 ];
 
+
 const createCategoryValidator = [
 	body("name")
 	  .isString()

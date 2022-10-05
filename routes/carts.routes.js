@@ -16,6 +16,7 @@ const {protectSession}=require('../middlewares/auth.middlewares')
 const cartsRoutes = express.Router();
 
 // 03. creamos los enpoints acompañados de la funcion
+
 cartsRoutes.use(protectSession)
 
 cartsRoutes.post("/add-product",createProductInCartValidator, addProductCart);

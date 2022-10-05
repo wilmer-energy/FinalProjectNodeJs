@@ -3,7 +3,9 @@ const { Categories } = require("../models/categories.model");
 const { Product } = require("../models/products.model");
 const { catchAsync } = require("../utils/catchAsync.util");
 const {uploadProductImgs, getProductImgsUrls}=require('../utils/firebase.util')
-const { ProductImg } = require('../models/productImgs.model')
+
+const { ProductImg } = require('../models/productImgs.model');
+
 
 
 const createPoduct = catchAsync(async (req, res) => {

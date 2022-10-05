@@ -1,13 +1,16 @@
 // 01. importamos modelo User
 const { Cart } = require("../models/carts.model");
-const { Products } = require("../models/products.model");
+const { Product } = require("../models/products.model");
 const { ProductInCar } = require("../models/productsInCar.model");
 const { Order } = require("../models/orders.model");
 const { catchAsync } = require("../utils/catchAsync.util");
+const { Email } = require("../utils/email.util");
 
 const addProductCart = catchAsync(async (req, res, next) => {
+  // console.log(req.body.productId);
   const product = await getProduct(req.body.productId);
 
+  // console.log(cart);
   if (!product) {
     return res.status(404).json({
       status: "Product not Found",
@@ -21,6 +24,7 @@ const addProductCart = catchAsync(async (req, res, next) => {
   }
 
   const cart = await getCart(req.sessionUser.id);
+
   const productInCart = await getProductCart(product, cart);
 
   if (productInCart.status == "active") {
@@ -56,7 +60,7 @@ const getCart = async (userId) => {
 };
 
 const getProduct = async (productId) => {
-  return await Products.findOne({
+  return await Product.findOne({
     where: { status: "active", id: productId },
   });
 };
@@ -160,6 +164,8 @@ const deleteProductCart = catchAsync(async (req, res, next) => {
   });
 });
 
+let bar = [];
+
 const purchaseCart = catchAsync(async (req, res, next) => {
   const cart = await Cart.findOne({
     where: { status: "active", userId: req.sessionUser.id },
@@ -181,32 +187,42 @@ const purchaseCart = catchAsync(async (req, res, next) => {
     });
   }
 
-  let totalPrice = 0;
+  // let totalPrice=0;
+  let totalP = 0;
 
-  productsInCart.forEach(async (productInCart) => {
+  const resolve = await Promise.all(
+  productsInCart.map(async (productInCart) => {
     const product = await getProduct(productInCart.productId);
-
+    
     product.update({
       quantity: product.quantity - productInCart.quantity,
     });
 
-    totalPrice += productInCart.quantity * product.price;
+    totalP += productInCart.quantity * product.price;
+
+  
 
     productInCart.update({
       status: "purchased",
     });
-  });
+    return totalP
+  }))
 
   cart.update({
     status: "purchased",
   });
+ 
+
 
   const newOrder = await Order.create({
     userId: req.sessionUser.id,
     cartId: cart.id,
-    totalPrice,
+    totalPrice: totalP,
     status: "created",
   });
+
+// Send mail when post has been created
+// await new Email(req.sessionUser.email).sendNewPost(title, content);
 
   return res.status(200).json({
     status: "success",
