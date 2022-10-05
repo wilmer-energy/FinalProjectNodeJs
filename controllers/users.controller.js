@@ -8,12 +8,9 @@ const { Product } = require("../models/products.model");
 // Utils
 const { catchAsync } = require("../utils/catchAsync.util");
 const { AppError } = require("../utils/appError.util");
-<<<<<<< HEAD
 const { Email } = require("../utils/email.util");
-=======
 const { Order } = require("../models/orders.model");
 
->>>>>>> a5e55e7c1f68ef493e0549f31f81ee0c122af0fe
 dotenv.config({ path: "./config.env" });
 
 // Gen random jwt signs
