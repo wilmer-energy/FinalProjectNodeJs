@@ -8,7 +8,12 @@ const { Product } = require("../models/products.model");
 // Utils
 const { catchAsync } = require("../utils/catchAsync.util");
 const { AppError } = require("../utils/appError.util");
+<<<<<<< HEAD
 const { Email } = require("../utils/email.util");
+=======
+const { Order } = require("../models/orders.model");
+
+>>>>>>> a5e55e7c1f68ef493e0549f31f81ee0c122af0fe
 dotenv.config({ path: "./config.env" });
 
 // Gen random jwt signs
@@ -110,20 +115,36 @@ const getUserProducts = catchAsync(async (req, res, next) => {
   const { sessionUser } = req;
 
   console.log(sessionUser.id);
-  const productUser = await  Product.findAll({where:{userId: sessionUser.id}});
+  const productUser = await Product.findAll({
+    where: { userId: sessionUser.id },
+  });
 
   res.status(200).json({
     data: productUser,
   });
 });
 
-const getOrdersUser = () => {
+const getOrdersUser = catchAsync(async (req, res, next) => {
+  const { sessionUser } = req;
+  const allOrders = await Order.findAll({ where: { userId: sessionUser.id } });
+  res.status(200).json({
+    status: "Success",
+    data: allOrders,
+  });
+});
 
-}
+const getOrdersUserById = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const{sessionUser}=req
+  const order = await Order.findOne({ where: { id } });
 
-const getOrdersUserById = () => {
-
-}
+  if(!(order.userId===sessionUser.id)) new AppError("You are not the owner of the order", 403)
+  
+  res.status(200).json({
+    status: "Success",
+    data: order,
+  });
+});
 
 module.exports = {
   getAllUsers,
@@ -133,5 +154,5 @@ module.exports = {
   login,
   getUserProducts,
   getOrdersUser,
-  getOrdersUserById
+  getOrdersUserById,
 };
