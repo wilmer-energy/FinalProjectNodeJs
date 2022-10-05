@@ -2,7 +2,7 @@ const { body } = require("express-validator");
 const { Categories } = require("../models/categories.model");
 const { Product } = require("../models/products.model");
 const { catchAsync } = require("../utils/catchAsync.util");
-const {uploadProductImgs}=require('../utils/firebase.util')
+const {uploadProductImgs, getProductImgsUrls}=require('../utils/firebase.util')
 const { ProductImg } = require('../models/productImgs.model')
 
 
@@ -30,14 +30,16 @@ const createPoduct = catchAsync(async (req, res) => {
 const productsAll = async (req, res) => {
   try {
     const product = await Product.findAll({ 
-      where: { status: "active" }
+      where: { status: "active" }, include: { model: ProductImg }
       
     });
+
+    const postsWithImgs = await getProductImgsUrls(product);
 
     return res.status(200).json({
       status: "success",
       data: {
-        product,
+        product:postsWithImgs,
       },
     });
   } catch (error) {

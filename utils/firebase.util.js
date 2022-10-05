@@ -54,11 +54,11 @@ const uploadProductImgs = async (imgs, productId) => {
    return dataImgs
 };
 
-const getProductImgsUrls = async (posts) => {
+const getProductImgsUrls = async (products) => {
   // Loop through posts to get to the postImgs
-  const postsWithImgsPromises = posts.map(async (post) => {
+  const postsWithImgsPromises = products.map(async (product) => {
     // Get imgs URLs
-    const postImgsPromises = post.postImgs.map(async (postImg) => {
+    const postImgsPromises = product.productImgs.map(async (postImg) => {
       const imgRef = ref(storage, postImg.imgUrl);
       const imgUrl = await getDownloadURL(imgRef);
 
@@ -70,12 +70,13 @@ const getProductImgsUrls = async (posts) => {
     const postImgs = await Promise.all(postImgsPromises);
 
     // Update old postImgs array with new array
-    post.postImgs = postImgs;
-    return post;
+    product.productImgs = postImgs;
+    return product;
   });
 
   return await Promise.all(postsWithImgsPromises);
 };
+
 
 module.exports = { storage, uploadProductImgs, getProductImgsUrls};
 //, getPostsImgsUrls
