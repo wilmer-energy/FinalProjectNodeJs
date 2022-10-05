@@ -3,12 +3,12 @@ const { Categories } = require("../models/categories.model");
 const { Product } = require("../models/products.model");
 const { catchAsync } = require("../utils/catchAsync.util");
 const {uploadProductImgs}=require('../utils/firebase.util')
+const { ProductImg } = require('../models/productImgs.model')
+
 
 const createPoduct = catchAsync(async (req, res) => {
-  const { title, description, price, categoryId, quantity, productImgs } = req.body;
-
-console.log(req.sessionUser.id);
-console.log(title);
+  const { title, description, price, categoryId, quantity, productImgs } =
+    req.body;
 
   const newProduct = await Product.create({
     title,
@@ -16,21 +16,22 @@ console.log(title);
     price,
     categoryId,
     quantity,
-    userId: sessionUser.id,
+    userId: req.sessionUser.id,
   });
-  let imgs=[]
-  if(!productImgs) imgs=await uploadProductImgs(productImgs,newProduct.id)
-  // 201 -> Success and a resource has been created
+ 
+  await uploadProductImgs(req.files, newProduct.id);
+  
   res.status(201).json({
     status: "success",
-    data: { newProduct,imgs },
+    data: {newProduct},
   });
 });
 
 const productsAll = async (req, res) => {
   try {
-    const product = await Product.findAll({
-      where: { status: "active" },
+    const product = await Product.findAll({ 
+      where: { status: "active" }
+      
     });
 
     return res.status(200).json({
@@ -129,18 +130,15 @@ const createCategory = catchAsync(async (req, res) => {
   });
 });
 
-const categoriesProductAll =  catchAsync(async(req, res) => {
-  
-    const categoriesProduct = await Categories.findAll();
+const categoriesProductAll = catchAsync(async (req, res) => {
+  const categoriesProduct = await Categories.findAll();
 
-    res.status(200).json({
-      status: "success",
-      data: {
-        categoriesProduct,
-      },
-    });
-    
-
+  res.status(200).json({
+    status: "success",
+    data: {
+      categoriesProduct,
+    },
+  });
 });
 
 const updateCategory = async (req, res) => {
@@ -161,8 +159,6 @@ const updateCategory = async (req, res) => {
     console.log(error);
   }
 };
-
-
 
 module.exports = {
   createPoduct,

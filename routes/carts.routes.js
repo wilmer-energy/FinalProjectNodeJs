@@ -2,7 +2,7 @@
 const express = require("express");
 
 const {
-  createCart,
+  addProductCart,
   updateCart,
   deleteProductCart,
   purchaseCart,
@@ -18,7 +18,7 @@ const cartsRoutes = express.Router();
 // 03. creamos los enpoints acompañados de la funcion
 cartsRoutes.use(protectSession)
 
-cartsRoutes.post("/add-product",createProductInCartValidator, createCart);
+cartsRoutes.post("/add-product",createProductInCartValidator, addProductCart);
 cartsRoutes.patch("/update-cart", updateCart);
 cartsRoutes.delete("/:productId", deleteProductCart);
 cartsRoutes.post("/purchase", purchaseCart);

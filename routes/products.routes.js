@@ -37,13 +37,13 @@ productRouter.get('/', productsAll)
 productRouter.get('/:id', productFind)
 
 productRouter.use(protectSession)
-productRouter.post('/',upload.array('productImgs',5),createPoduct)
+productRouter.post('/',upload.array('productImgs',3),createPoduct)
 productRouter.patch('/:id', productUpdate)
 productRouter.delete('/:id', productDelete)
 
 
 
-productRouter.post('/categories', protectUsersAccount,createCategoryValidator, createCategory)
+productRouter.post('/categories',createCategoryValidator, createCategory)
 productRouter.patch('/categories/:id',categoriesExists, updateCategory)
 
 

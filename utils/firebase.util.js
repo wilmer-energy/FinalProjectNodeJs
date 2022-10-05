@@ -27,13 +27,14 @@ const storage = getStorage(firebaseApp);
 
 let dataImgs = [];
 
+
 const uploadProductImgs = async (imgs, productId) => {
   // Map async -> Async operations with arrays
   const imgsPromises = imgs.map(async (img) => {
     // Create firebase reference
     const [originalName, ext] = img.originalname.split("."); // -> [pug, jpg]
 
-    const filename = `posts/${productId}/${originalName}-${Date.now()}.${ext}`;
+    const filename = `products/${productId}/${originalName}-${Date.now()}.${ext}`;
     const imgRef = ref(storage, filename);
 
     // Upload image to Firebase
@@ -53,7 +54,7 @@ const uploadProductImgs = async (imgs, productId) => {
    return dataImgs
 };
 
-const getPostsImgsUrls = async (posts) => {
+const getProductImgsUrls = async (posts) => {
   // Loop through posts to get to the postImgs
   const postsWithImgsPromises = posts.map(async (post) => {
     // Get imgs URLs
@@ -76,4 +77,5 @@ const getPostsImgsUrls = async (posts) => {
   return await Promise.all(postsWithImgsPromises);
 };
 
-module.exports = { storage, uploadProductImgs, getPostsImgsUrls };
+module.exports = { storage, uploadProductImgs, getProductImgsUrls};
+//, getPostsImgsUrls
