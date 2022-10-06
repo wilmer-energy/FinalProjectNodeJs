@@ -4,7 +4,8 @@
 	"description": "A simple Express server",
 	"main": "index.js",
 	"scripts": {
-		"start": "nodemon server.js"
+		"start": "node server.js",
+		"start:dev":"nodemon server.js"
 	},
 	"author": "Maximiliano Rangel",
 	"license": "ISC",
@@ -16,6 +17,7 @@
 		"express-rate-limit": "^6.4.0",
 		"express-validator": "^6.14.2",
 		"firebase": "^9.10.0",
+		"helmet": "^6.0.0",
 		"html-to-text": "^8.2.1",
 		"jsonwebtoken": "^8.5.1",
 		"morgan": "^1.10.0",
