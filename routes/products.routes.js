@@ -21,6 +21,7 @@ const {
 	protectUsersAccount,
 	protectAdmin,
 } = require('../middlewares/auth.middlewares');
+const {productExists}=require('../middlewares/products.middleware')
 
 const {categoriesExists} =  require('../middlewares/categories.middlewares')
 const {
@@ -34,12 +35,12 @@ const productRouter = express.Router();
 
 productRouter.get('/categories', categoriesProductAll)
 productRouter.get('/', productsAll)
-productRouter.get('/:id', productFind)
+productRouter.get('/:id',productExists, productFind)
 
 productRouter.use(protectSession)
 productRouter.post('/',upload.array('productImgs',5),createPoduct)
-productRouter.patch('/:id', productUpdate)
-productRouter.delete('/:id', productDelete)
+productRouter.patch('/:id',productExists, productUpdate)
+productRouter.delete('/:id',productExists, productDelete)
 
 
 
